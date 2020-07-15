@@ -9,6 +9,6 @@ interface Service {
 
     @GET ("movie/popular")
     suspend fun getMoviesPopular(@Query("api_key") apiKey:String,
-                         @Query("language") language: String)
+                                 @Query("language") language: String)
             : Response<MovieResponse>
 }

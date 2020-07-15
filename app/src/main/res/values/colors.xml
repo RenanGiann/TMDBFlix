@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#03A9F4</color>
+
+    // White
+    <color name="white">#FFFFFF</color>
+
+    // Black
+    <color name="black">#000000</color>
+
+    //Orange
+    <color name="orange">#F47E00</color>
+
+    //Red
+    <color name="red">#F44336</color>
+
+    //Blue
+    <color name="blue">#3656F4</color>
+
+    //Purple
+    <color name="purple">#7936F4</color>
+
+    //Yellow
+    <color name="yellow">#F4CB36</color>
+
 </resources>
