@@ -11,14 +11,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
-class HomeViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
+class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
 
     val movieResponse = MutableLiveData<State<MovieResponse>>()
 
-    fun getPopularMovie(apiKey: String, language: String) = viewModelScope.launch {
+    fun getGenreMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
         movieResponse.value = State.loading(true)
         val response = withContext(ioDispatcher) {
-            repository.getMoviePopular(apiKey, language)
+            repository.getMovieGenre(apiKey, language, genre)
         }
         movieResponse.postValue(randomMovieResponse(response))
     }

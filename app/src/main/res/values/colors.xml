@@ -15,14 +15,21 @@
 
     //Red
     <color name="red">#F44336</color>
+    <color name="redDark">#650B04</color>
 
     //Blue
     <color name="blue">#3656F4</color>
+    <color name="colorTextToolbar">#2799f3</color>
+    <color name="colorDrawable">#E20FC8E4</color>
+    <color name="colorAnimation">#0F67BA</color>
 
     //Purple
     <color name="purple">#7936F4</color>
 
     //Yellow
     <color name="yellow">#F4CB36</color>
+
+    //gray
+    <color name="gray">#CCCCCC</color>
 
 </resources>

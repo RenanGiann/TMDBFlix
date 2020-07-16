@@ -1,4 +1,4 @@
-package br.com.renangiannella.tmdbflix.ui.fragment
+package br.com.renangiannella.tmdbflix.ui.fragment.adventure
 
 import android.os.Bundle
 import android.util.Log
@@ -8,20 +8,29 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import br.com.renangiannella.tmdbflix.BuildConfig
-import br.com.renangiannella.tmdbflix.MovieViewModelProviderFactory
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.core.Status
+import br.com.renangiannella.tmdbflix.data.model.result.MovieResult
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
-import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.HomeViewModel
+import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.GenreViewModel
+import br.com.renangiannella.tmdbflix.ui.fragment.MovieGenreViewModelProviderFactory
+import br.com.renangiannella.tmdbflix.ui.fragment.adapter.MovieAdapter
+import kotlinx.android.synthetic.main.fragment_adventure.*
 import kotlinx.coroutines.Dispatchers
 
 class AdventureFragment: Fragment() {
 
-    private val viewModel: HomeViewModel by lazy {
+    lateinit var mAdapter: MovieAdapter
+
+    private val viewModel: GenreViewModel by lazy {
         val viewModelProviderFactory =
-            MovieViewModelProviderFactory(MovieRepository(), Dispatchers.IO)
-        ViewModelProvider(this, viewModelProviderFactory).get(HomeViewModel::class.java)
+            MovieGenreViewModelProviderFactory(
+                MovieRepository(),
+                Dispatchers.IO
+            )
+        ViewModelProvider(this, viewModelProviderFactory).get(GenreViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,19 +40,20 @@ class AdventureFragment: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getPopularMovie(BuildConfig.API_KEY, "pt-BR")
+        val idAdventure: Int = 12
+
+        viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", idAdventure)
 
         viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
             when (response.status) {
                 Status.SUCCESS -> {
                     response.data?.let {
-                        //it.results
-                        Log.d("ADVFragment", "FILME -> ${it.results[4].original_title}")
+                        setupRecyclerView(it.results)
                     }
                 }
                 Status.ERROR -> {
                     response.errorMessage?.let {
-                        Log.d("ADVFragment", "Error Message $it")
+                        Log.d("AdventureFragment", "Error Message $it")
                     }
                 }
 
@@ -52,5 +62,14 @@ class AdventureFragment: Fragment() {
                 }
             }
         })
+    }
+
+    private fun setupRecyclerView(movies: List<MovieResult>) {
+        mAdapter = MovieAdapter(movies, {}, {}, {})
+        with(recyclerViewAdventure) {
+            layoutManager = GridLayoutManager(activity, 2)
+            setHasFixedSize(true)
+            adapter = mAdapter
+        }
     }
 }
