@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.renangiannella.tmdbflix.core.State
+import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -31,4 +32,8 @@ class PopViewModel(val repository: MovieRepository, private val ioDispatcher: Co
         }
         return State.errorMessage(response.message(), response.code())
     }
+
+    suspend fun insertMovie(favoriteMovie: FavoriteMovie) = repository.insertFavoriteMovie(favoriteMovie)
+
+    suspend fun deleteMovie(favoriteMovie: FavoriteMovie) = repository.deleteFavoriteMovie(favoriteMovie)
 }
