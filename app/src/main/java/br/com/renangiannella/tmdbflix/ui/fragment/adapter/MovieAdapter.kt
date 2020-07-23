@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.renangiannella.tmdbflix.BuildConfig
 import br.com.renangiannella.tmdbflix.R
+import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.result.MovieResult
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class MovieAdapter(val movies: List<MovieResult>,
+                   val favorites: List<FavoriteMovie>,
                    val clickMovie: ((movie: MovieResult)-> Unit),
                    val clickLike: ((movie: MovieResult)-> Unit),
                    val clickDislike:((movie: MovieResult)-> Unit)):
@@ -24,7 +26,8 @@ class MovieAdapter(val movies: List<MovieResult>,
     override fun getItemCount() = movies.count()
 
     override fun onBindViewHolder(holder: MovieAdapter.MovieAdapterViewHolder, position: Int) {
-        holder.bind(movies[position])
+        holder.setIsRecyclable(false)
+        holder.bind(movies[position], favorites)
     }
 
     class MovieAdapterViewHolder(itemView: View,
@@ -41,23 +44,31 @@ class MovieAdapter(val movies: List<MovieResult>,
 
         private val picasso = Picasso.get()
 
-        fun bind(movie: MovieResult){
+        fun bind(movie: MovieResult, favorite: List<FavoriteMovie>){
             title.text = movie.original_title
             vote.text = movie.vote_average
             releaseDate.text = movie.release_date
+
+            for (i in favorite) {
+                when {
+                    movie.id.equals(i.id) -> imageLike.visibility = View.VISIBLE
+                }
+            }
 
             movie.poster_path.let {
                 picasso.load("""${BuildConfig.BASE_URL_IMAGE}${movie.poster_path}""").into(posterMovie)
             }
 
-            imageDislike.setOnClickListener{
-                imageDislike.visibility = View.GONE
-                imageLike.visibility = View.VISIBLE
+            imageLike.setOnClickListener{
+                clickDislike.invoke(movie)
+                imageDislike.visibility = View.VISIBLE
+                imageLike.visibility = View.GONE
             }
 
-            imageLike.setOnClickListener {
-                imageLike.visibility = View.GONE
-                imageDislike.visibility = View.VISIBLE
+            imageDislike.setOnClickListener {
+                clickLike.invoke(movie)
+                imageLike.visibility = View.VISIBLE
+                imageDislike.visibility = View.GONE
             }
         }
 

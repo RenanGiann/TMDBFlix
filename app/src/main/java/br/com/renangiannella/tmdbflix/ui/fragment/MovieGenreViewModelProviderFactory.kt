@@ -1,5 +1,6 @@
 package br.com.renangiannella.tmdbflix.ui.fragment
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository

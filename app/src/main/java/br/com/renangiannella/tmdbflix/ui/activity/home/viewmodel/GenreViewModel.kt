@@ -1,10 +1,7 @@
 package br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import br.com.renangiannella.tmdbflix.core.State
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
@@ -14,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
-class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher, application: Application): AndroidViewModel(application) {
+class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
 
     val movieResponse = MutableLiveData<State<MovieResponse>>()
 
@@ -26,6 +23,10 @@ class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: 
         movieResponse.postValue(randomMovieResponse(response))
     }
 
+    fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
+
+    suspend fun deleteMovie(favoriteMovie: FavoriteMovie) = repository.deleteFavoriteMovie(favoriteMovie)
+
     fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
@@ -35,7 +36,20 @@ class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: 
         return State.errorMessage(response.message(), response.code())
     }
 
-    suspend fun insertMovie(favoriteMovie: FavoriteMovie) = repository.insertFavoriteMovie(favoriteMovie)
+    suspend fun insertMovie(favoriteMovie: FavoriteMovie) =
+        repository.insertFavoriteMovie(favoriteMovie)
 
-    suspend fun deleteMovie(favoriteMovie: FavoriteMovie) = repository.deleteFavoriteMovie(favoriteMovie)
+
+    class MovieGenreViewModelProviderFactory(
+        val repository: MovieRepository,
+        val ioDispatcher: CoroutineDispatcher
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(GenreViewModel::class.java)) {
+                return GenreViewModel(repository, ioDispatcher) as T
+            }
+            throw IllegalArgumentException("unknown viewmodel class")
+        }
+    }
+
 }
