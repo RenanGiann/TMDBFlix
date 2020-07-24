@@ -31,5 +31,6 @@
 
     //gray
     <color name="gray">#CCCCCC</color>
+    <color name="gray_dark">#424141</color>
 
 </resources>

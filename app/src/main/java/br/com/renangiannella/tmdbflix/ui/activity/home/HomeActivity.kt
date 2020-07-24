@@ -3,6 +3,7 @@ package br.com.renangiannella.tmdbflix.ui.activity.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import br.com.renangiannella.tmdbflix.BuildConfig
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import br.com.renangiannella.tmdbflix.ui.activity.favorite.FavoriteActivity
@@ -49,7 +50,17 @@ class HomeActivity : AppCompatActivity() {
 
         val bottomNavigation: BottomNavigationView = bottomNavigationView
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
 
+    fun refresh() {
+        popViewModel.getPopularMovie(BuildConfig.API_KEY, "pt-BR")
+        viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", 28)
+        viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", 12)
+        viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", 35)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        refresh()
     }
 }
