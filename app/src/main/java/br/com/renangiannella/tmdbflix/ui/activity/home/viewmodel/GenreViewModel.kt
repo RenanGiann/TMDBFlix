@@ -1,9 +1,9 @@
 package br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import br.com.renangiannella.tmdbflix.core.State
+import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,6 +23,10 @@ class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: 
         movieResponse.postValue(randomMovieResponse(response))
     }
 
+    fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
+
+    suspend fun deleteMovie(favoriteMovie: FavoriteMovie) = repository.deleteFavoriteMovie(favoriteMovie)
+
     fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
@@ -31,4 +35,21 @@ class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: 
         }
         return State.errorMessage(response.message(), response.code())
     }
+
+    suspend fun insertMovie(favoriteMovie: FavoriteMovie) =
+        repository.insertFavoriteMovie(favoriteMovie)
+
+
+    class MovieGenreViewModelProviderFactory(
+        val repository: MovieRepository,
+        val ioDispatcher: CoroutineDispatcher
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(GenreViewModel::class.java)) {
+                return GenreViewModel(repository, ioDispatcher) as T
+            }
+            throw IllegalArgumentException("unknown viewmodel class")
+        }
+    }
+
 }

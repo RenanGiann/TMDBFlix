@@ -1,9 +1,8 @@
 package br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import br.com.renangiannella.tmdbflix.core.State
+import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,6 +22,10 @@ class PopViewModel(val repository: MovieRepository, private val ioDispatcher: Co
         movieResponse.postValue(randomMovieResponse(response))
     }
 
+    fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
+
+    suspend fun deleteMovie(favoriteMovie: FavoriteMovie) = repository.deleteFavoriteMovie(favoriteMovie)
+
     fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
@@ -30,5 +33,16 @@ class PopViewModel(val repository: MovieRepository, private val ioDispatcher: Co
             }
         }
         return State.errorMessage(response.message(), response.code())
+    }
+
+    suspend fun insertMovie(favoriteMovie: FavoriteMovie) = repository.insertFavoriteMovie(favoriteMovie)
+
+    class MovieViewModelProviderFactory(val repository: MovieRepository, val ioDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(PopViewModel::class.java)) {
+                return PopViewModel(repository, ioDispatcher) as T
+            }
+            throw IllegalArgumentException("unknown viewmodel class")
+        }
     }
 }
