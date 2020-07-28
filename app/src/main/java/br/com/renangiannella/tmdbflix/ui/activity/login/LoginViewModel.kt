@@ -16,7 +16,7 @@ import org.w3c.dom.Text
 
 class LoginViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher, application: Application): AndroidViewModel(application) {
 
-    fun getUserDB(email: String, password: String): LiveData<User> = repository.getUser(email, password)
+    fun getUserDB(email: String, password: String): LiveData<User> =  repository.getUser(email, password)
 
     fun isValid(email: EditText, password: EditText): Int {
 
@@ -29,7 +29,7 @@ class LoginViewModel(val repository: MovieRepository, private val ioDispatcher: 
         } else -1
     }
 
-    class FavoriteViewModelFactory(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher, private val application: Application): ViewModelProvider.Factory {
+    class LoginViewModelFactory(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher, private val application: Application): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
                 return LoginViewModel(repository, ioDispatcher, application) as T
