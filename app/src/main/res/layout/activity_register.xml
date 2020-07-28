@@ -4,51 +4,87 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.register.RegisterActivity">
+    tools:context=".ui.activity.register.RegisterActivity"
+    android:background="@drawable/gradient">
+
+    <TextView
+        android:id="@+id/txtRegistrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Cadastre-se"
+        android:textColor="@color/white"
+        android:textSize="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/edtName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="60dp"
         android:layout_marginEnd="40dp"
-        android:background="@color/orange"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/background_edittext"
+        android:fontFamily="monospace"
+        android:hint="nome"
+        android:padding="12dp"
+        android:textColor="@color/colorDrawable"
+        android:textColorHint="@color/orange"
+        app:layout_constraintBottom_toTopOf="@+id/edtEmailRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/edtEmailRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="60dp"
         android:layout_marginEnd="40dp"
-        android:background="@color/red"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/background_edittext"
+        android:fontFamily="monospace"
+        android:hint="email"
+        android:padding="12dp"
+        android:textColor="@color/colorDrawable"
+        android:textColorHint="@color/orange"
+        app:layout_constraintBottom_toTopOf="@+id/edtPasswordRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtName" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/edtPasswordRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="60dp"
         android:layout_marginEnd="40dp"
-        android:background="@color/yellow"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/background_edittext"
+        android:fontFamily="monospace"
+        android:hint="senha"
+        android:padding="12dp"
+        android:textColor="@color/colorDrawable"
+        android:textColorHint="@color/orange"
+        app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailRegister" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="150dp"
+        android:background="@drawable/background_button"
+        android:text="Cadastrar"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
