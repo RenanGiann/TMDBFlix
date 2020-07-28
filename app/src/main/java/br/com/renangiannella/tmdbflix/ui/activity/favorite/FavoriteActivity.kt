@@ -7,8 +7,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
+import br.com.renangiannella.tmdbflix.data.utils.SharedPreference
 import br.com.renangiannella.tmdbflix.ui.activity.favorite.viewmodel.FavoriteViewModel
+import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
+import br.com.renangiannella.tmdbflix.ui.activity.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_favorite.*
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -26,8 +30,17 @@ class FavoriteActivity : AppCompatActivity() {
         viewModel = FavoriteViewModel.FavoriteViewModelFactory(repository, Dispatchers.IO).create(
             FavoriteViewModel::class.java)
 
+//        val sharedPref = SharedPreference(this)
+//        sharedPref.getData(LoginActivity.USER)?.let {
+//            userEmail = it
+//        }
 
-        viewModel.getFavoriteMovie("renan@zup.com").observe(this, Observer {
+        HomeActivity.getData(this)?.let { loggedUser ->
+            userEmail = loggedUser
+        }
+
+
+        viewModel.getFavoriteMovie(userEmail).observe(this, Observer {
             it?.let {
                 with(recyclerViewFavorite){
                     layoutManager = GridLayoutManager(this@FavoriteActivity, 2)
@@ -36,7 +49,7 @@ class FavoriteActivity : AppCompatActivity() {
                         GlobalScope.launch {
                             viewModel.deleteMovie(
                                 FavoriteMovie(
-                                    it.id, "renan@zup.com", it.poster_path,
+                                    it.id, userEmail, it.poster_path,
                                     it.overview, it.release_date,
                                     it.genre_ids, it.original_title, it.vote_average
                                 )
@@ -47,6 +60,8 @@ class FavoriteActivity : AppCompatActivity() {
             }
         })
     }
+
+
 
 
 }
