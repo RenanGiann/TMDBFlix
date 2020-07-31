@@ -41,6 +41,10 @@ class ComedyFragment: Fragment() {
             viewModel = (it as HomeActivity).viewModel
             val idComedy = 35
 
+//            HomeActivity.getData(it)?.let {loggedUser ->
+//                userEmail = loggedUser
+//            }
+
             viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", idComedy)
 
             viewModel.getFavoriteMovie("renan@zup.com").observe(viewLifecycleOwner, Observer {

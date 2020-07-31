@@ -15,9 +15,11 @@ import br.com.renangiannella.tmdbflix.core.Status
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.result.MovieResult
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
+import br.com.renangiannella.tmdbflix.data.utils.SharedPreference
 import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
 import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.GenreViewModel
 import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.PopViewModel
+import br.com.renangiannella.tmdbflix.ui.activity.login.LoginActivity
 import br.com.renangiannella.tmdbflix.ui.fragment.adapter.MovieAdapter
 import kotlinx.android.synthetic.main.fragment_popular.*
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +31,7 @@ class PopularFragment: Fragment() {
 
     lateinit var mAdapter: MovieAdapter
     lateinit var viewModel: PopViewModel
+    lateinit var userEmail: String
     var listFavorite = listOf<FavoriteMovie>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,7 +45,11 @@ class PopularFragment: Fragment() {
             viewModel = (it as HomeActivity).popViewModel
             viewModel.getPopularMovie(BuildConfig.API_KEY, "pt-BR")
 
-            viewModel.getFavoriteMovie("renan@zup.com").observe(viewLifecycleOwner, Observer {
+            HomeActivity.getData(it)?.let {loggedUser ->
+                userEmail = loggedUser
+            }
+
+            viewModel.getFavoriteMovie(userEmail).observe(viewLifecycleOwner, Observer {
                 it?.let {
                     listFavorite = it
                 }
@@ -75,7 +82,7 @@ class PopularFragment: Fragment() {
             GlobalScope.launch {
                 viewModel.insertMovie(
                     FavoriteMovie(
-                        movieResult.id, "renan@zup.com", movieResult.poster_path,
+                        movieResult.id, userEmail, movieResult.poster_path,
                         movieResult.overview, movieResult.release_date,
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
@@ -85,7 +92,7 @@ class PopularFragment: Fragment() {
             GlobalScope.launch {
                 viewModel.deleteMovie(
                     FavoriteMovie(
-                        movieResult.id, "renan@zup.com", movieResult.poster_path,
+                        movieResult.id, userEmail, movieResult.poster_path,
                         movieResult.overview, movieResult.release_date,
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
