@@ -1,10 +1,8 @@
 package br.com.renangiannella.tmdbflix.ui.activity.search
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import br.com.renangiannella.tmdbflix.core.State
+import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,8 +14,8 @@ class SearchViewModel(val repository: MovieRepository, private val ioDispatcher:
     val searchResponse = MutableLiveData<State<MovieResponse>>()
 
     fun searchMovies(query: String, apiKey: String, language: String) = viewModelScope.launch {
-        searchResponse.value = State.loading(true)
         try {
+            searchResponse.value = State.loading(true)
             val _response = withContext(ioDispatcher) {
                 repository.searchMovies(query, apiKey, language)
             }
@@ -25,6 +23,16 @@ class SearchViewModel(val repository: MovieRepository, private val ioDispatcher:
         } catch (t: Throwable) {
             searchResponse.postValue(State.error(t))
         }
+    }
+
+    fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
+
+    fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
+        repository.deleteFavoriteMovie(favoriteMovie)
+    }
+
+    fun insertMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
+        repository.insertFavoriteMovie(favoriteMovie)
     }
 
     class SearchViewModelFactory(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModelProvider.Factory {

@@ -24,7 +24,9 @@ class PopViewModel(val repository: MovieRepository, private val ioDispatcher: Co
 
     fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
 
-    suspend fun deleteMovie(favoriteMovie: FavoriteMovie) = repository.deleteFavoriteMovie(favoriteMovie)
+    fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
+        repository.deleteFavoriteMovie(favoriteMovie)
+    }
 
     fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
         if (response.isSuccessful) {
@@ -35,7 +37,9 @@ class PopViewModel(val repository: MovieRepository, private val ioDispatcher: Co
         return State.errorMessage(response.message(), response.code())
     }
 
-    suspend fun insertMovie(favoriteMovie: FavoriteMovie) = repository.insertFavoriteMovie(favoriteMovie)
+    fun insertMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
+        repository.insertFavoriteMovie(favoriteMovie)
+    }
 
     class MovieViewModelProviderFactory(val repository: MovieRepository, val ioDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

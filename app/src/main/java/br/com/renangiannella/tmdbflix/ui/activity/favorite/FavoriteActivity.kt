@@ -1,6 +1,7 @@
 package br.com.renangiannella.tmdbflix.ui.activity.favorite
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,11 +31,6 @@ class FavoriteActivity : AppCompatActivity() {
         viewModel = FavoriteViewModel.FavoriteViewModelFactory(repository, Dispatchers.IO).create(
             FavoriteViewModel::class.java)
 
-//        val sharedPref = SharedPreference(this)
-//        sharedPref.getData(LoginActivity.USER)?.let {
-//            userEmail = it
-//        }
-
         HomeActivity.getData(this)?.let { loggedUser ->
             userEmail = loggedUser
         }
@@ -46,7 +42,6 @@ class FavoriteActivity : AppCompatActivity() {
                     layoutManager = GridLayoutManager(this@FavoriteActivity, 2)
                     setHasFixedSize(true)
                     adapter = FavoriteAdapter(it, {}, {
-                        GlobalScope.launch {
                             viewModel.deleteMovie(
                                 FavoriteMovie(
                                     it.id, userEmail, it.poster_path,
@@ -54,7 +49,6 @@ class FavoriteActivity : AppCompatActivity() {
                                     it.genre_ids, it.original_title, it.vote_average
                                 )
                             )
-                        }
                     })
                 }
             }
