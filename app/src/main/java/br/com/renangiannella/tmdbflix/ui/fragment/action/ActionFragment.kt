@@ -20,6 +20,7 @@ import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.GenreViewModel
 import br.com.renangiannella.tmdbflix.ui.fragment.MovieGenreViewModelProviderFactory
 import br.com.renangiannella.tmdbflix.ui.fragment.adapter.MovieAdapter
 import kotlinx.android.synthetic.main.fragment_action.*
+import kotlinx.android.synthetic.main.fragment_popular.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ class ActionFragment: Fragment() {
 
     lateinit var mAdapter: MovieAdapter
     lateinit var viewModel: GenreViewModel
+    lateinit var userEmail: String
     var listFavorite = listOf<FavoriteMovie>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,13 +45,18 @@ class ActionFragment: Fragment() {
 
             viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", idAction)
 
-            viewModel.getFavoriteMovie("renan@zup.com").observe(viewLifecycleOwner, Observer {
+            HomeActivity.getData(it)?.let {loggedUser ->
+                userEmail = loggedUser
+            }
+
+            viewModel.getFavoriteMovie(userEmail).observe(viewLifecycleOwner, Observer {
                 it?.let {
                     listFavorite = it
                 }
             })
 
             viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+                loadingAction.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {
                         response.data?.let {
@@ -73,25 +80,21 @@ class ActionFragment: Fragment() {
 
     private fun setupRecyclerView(movies: List<MovieResult>) {
         mAdapter = MovieAdapter(movies, listFavorite, {}, { movieResult ->
-            GlobalScope.launch {
                 viewModel.insertMovie(
                     FavoriteMovie(
-                        movieResult.id, "renan@zup.com", movieResult.poster_path,
+                        movieResult.id, userEmail, movieResult.poster_path,
                         movieResult.overview, movieResult.release_date,
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
                 )
-            }
         }, { movieResult ->
-            GlobalScope.launch {
                 viewModel.deleteMovie(
                     FavoriteMovie(
-                        movieResult.id, "renan@zup.com", movieResult.poster_path,
+                        movieResult.id, userEmail, movieResult.poster_path,
                         movieResult.overview, movieResult.release_date,
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
                 )
-            }
         })
         with(recyclerViewAction) {
             layoutManager = GridLayoutManager(activity, 2)
