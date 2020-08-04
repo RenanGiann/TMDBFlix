@@ -27,4 +27,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchBar" />
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recycleSearch"
+        app:layout_constraintStart_toStartOf="@+id/recycleSearch"
+        app:layout_constraintTop_toBottomOf="@+id/searchBar"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

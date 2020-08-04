@@ -21,6 +21,7 @@ import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.GenreViewModel
 import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.PopViewModel
 import br.com.renangiannella.tmdbflix.ui.activity.login.LoginActivity
 import br.com.renangiannella.tmdbflix.ui.fragment.adapter.MovieAdapter
+import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.fragment_popular.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -56,6 +57,7 @@ class PopularFragment: Fragment() {
             })
 
             viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+                loadingPop.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {
                         response.data?.let {
@@ -79,7 +81,6 @@ class PopularFragment: Fragment() {
 
     private fun setupRecyclerView(movies: List<MovieResult>) {
         mAdapter = MovieAdapter(movies, listFavorite, {}, { movieResult ->
-            GlobalScope.launch {
                 viewModel.insertMovie(
                     FavoriteMovie(
                         movieResult.id, userEmail, movieResult.poster_path,
@@ -87,9 +88,7 @@ class PopularFragment: Fragment() {
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
                 )
-            }
         }, { movieResult ->
-            GlobalScope.launch {
                 viewModel.deleteMovie(
                     FavoriteMovie(
                         movieResult.id, userEmail, movieResult.poster_path,
@@ -97,7 +96,6 @@ class PopularFragment: Fragment() {
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
                 )
-            }
         })
         with(recyclerViewPop) {
             layoutManager = GridLayoutManager(activity, 2)

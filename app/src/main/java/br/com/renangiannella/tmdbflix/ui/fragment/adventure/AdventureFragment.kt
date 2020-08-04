@@ -28,6 +28,7 @@ class AdventureFragment: Fragment() {
 
     lateinit var mAdapter: MovieAdapter
     lateinit var viewModel: GenreViewModel
+    lateinit var userEmail: String
     var listFavorite = listOf<FavoriteMovie>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,13 +44,18 @@ class AdventureFragment: Fragment() {
 
             viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", idAdventure)
 
-            viewModel.getFavoriteMovie("renan@zup.com").observe(viewLifecycleOwner, Observer {
+            HomeActivity.getData(it)?.let {loggedUser ->
+                userEmail = loggedUser
+            }
+
+            viewModel.getFavoriteMovie(userEmail).observe(viewLifecycleOwner, Observer {
                 it?.let {
                     listFavorite = it
                 }
             })
 
             viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+                loadingAdventure.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {
                         response.data?.let {
@@ -72,25 +78,21 @@ class AdventureFragment: Fragment() {
 
     private fun setupRecyclerView(movies: List<MovieResult>) {
         mAdapter = MovieAdapter(movies, listFavorite, {}, { movieResult ->
-            GlobalScope.launch {
                 viewModel.insertMovie(
                     FavoriteMovie(
-                        movieResult.id, "renan@zup.com", movieResult.poster_path,
+                        movieResult.id, userEmail, movieResult.poster_path,
                         movieResult.overview, movieResult.release_date,
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
                 )
-            }
         }, { movieResult ->
-            GlobalScope.launch {
                 viewModel.deleteMovie(
                     FavoriteMovie(
-                        movieResult.id, "renan@zup.com", movieResult.poster_path,
+                        movieResult.id, userEmail, movieResult.poster_path,
                         movieResult.overview, movieResult.release_date,
                         movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                     )
                 )
-            }
         })
         with(recyclerViewAdventure) {
             layoutManager = GridLayoutManager(activity, 2)

@@ -25,7 +25,9 @@ class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: 
 
     fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
 
-    suspend fun deleteMovie(favoriteMovie: FavoriteMovie) = repository.deleteFavoriteMovie(favoriteMovie)
+    fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
+        repository.deleteFavoriteMovie(favoriteMovie)
+    }
 
     fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
         if (response.isSuccessful) {
@@ -36,8 +38,10 @@ class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: 
         return State.errorMessage(response.message(), response.code())
     }
 
-    suspend fun insertMovie(favoriteMovie: FavoriteMovie) =
-        repository.insertFavoriteMovie(favoriteMovie)
+    fun insertMovie(favoriteMovie: FavoriteMovie) =
+        viewModelScope.launch {
+            repository.insertFavoriteMovie(favoriteMovie)
+        }
 
 
     class MovieGenreViewModelProviderFactory(
