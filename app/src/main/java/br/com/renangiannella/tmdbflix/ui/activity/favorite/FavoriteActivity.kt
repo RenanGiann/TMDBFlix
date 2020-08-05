@@ -14,6 +14,7 @@ import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
 import br.com.renangiannella.tmdbflix.ui.activity.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_favorite.*
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.include_toobar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -26,6 +27,11 @@ class FavoriteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorite)
+
+        toolbarMovies.title = "Favoritos"
+        setSupportActionBar(toolbarMovies)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val repository = MovieRepository(this)
         viewModel = FavoriteViewModel.FavoriteViewModelFactory(repository, Dispatchers.IO).create(
