@@ -21,6 +21,7 @@ import br.com.renangiannella.tmdbflix.ui.fragment.adapter.MovieAdapter
 import kotlinx.android.synthetic.main.activity_favorite.*
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.fragment_popular.*
+import kotlinx.android.synthetic.main.include_toobar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,6 +36,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        toolbarMovies.title = "Pesquisa"
+        setSupportActionBar(toolbarMovies)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val repository = MovieRepository(this)
         viewModel = SearchViewModel.SearchViewModelFactory(repository, Dispatchers.IO).create(SearchViewModel::class.java)
