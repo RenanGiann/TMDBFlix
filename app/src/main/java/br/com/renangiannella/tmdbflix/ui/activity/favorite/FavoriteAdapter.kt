@@ -25,6 +25,8 @@ class FavoriteAdapter(val favorites: List<FavoriteMovie>, val clickMovie: ((movi
         holder.bind(favorites[position])
     }
 
+    fun getCurrentMovie(position: Int) = favorites[position]
+
     class MovieAdapterViewHolder(itemView: View,
                                  val clickMovie: ((movie: FavoriteMovie)-> Unit),
                                  val clickDislike:((movie: FavoriteMovie)-> Unit)): RecyclerView.ViewHolder(itemView) {

@@ -5,6 +5,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
@@ -12,6 +14,7 @@ import br.com.renangiannella.tmdbflix.data.utils.SharedPreference
 import br.com.renangiannella.tmdbflix.ui.activity.favorite.viewmodel.FavoriteViewModel
 import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
 import br.com.renangiannella.tmdbflix.ui.activity.login.LoginActivity
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_favorite.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.include_toobar.*
@@ -23,6 +26,7 @@ class FavoriteActivity : AppCompatActivity() {
 
     lateinit var userEmail: String
     lateinit var viewModel: FavoriteViewModel
+    lateinit var favoriteAdapter: FavoriteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,27 +45,57 @@ class FavoriteActivity : AppCompatActivity() {
             userEmail = loggedUser
         }
 
+        deleteMovieSwipe(recyclerViewFavorite)
 
         viewModel.getFavoriteMovie(userEmail).observe(this, Observer {
             it?.let {
                 with(recyclerViewFavorite){
+                    favoriteAdapter = FavoriteAdapter(it, {}, {favorite ->
+                        viewModel.deleteMovie(favorite)
+                        showSnackBar(recyclerViewFavorite, favorite)
+                    })
                     layoutManager = GridLayoutManager(this@FavoriteActivity, 2)
                     setHasFixedSize(true)
-                    adapter = FavoriteAdapter(it, {}, {
-                            viewModel.deleteMovie(
-                                FavoriteMovie(
-                                    it.id, userEmail, it.poster_path,
-                                    it.overview, it.release_date,
-                                    it.genre_ids, it.original_title, it.vote_average
-                                )
-                            )
-                    })
+                    adapter = favoriteAdapter
                 }
             }
         })
     }
 
+    private fun deleteMovieSwipe(view: View) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
 
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val favorite = favoriteAdapter.getCurrentMovie(viewHolder.adapterPosition)
+                viewModel.deleteMovie(favorite)
+                showSnackBar(view, favorite)
+            }
+
+        }
+
+        ItemTouchHelper(itemTouchHelperCallback).apply {
+            attachToRecyclerView(recyclerViewFavorite)
+        }
+    }
+
+    private fun showSnackBar(view: View, favoriteMovie: FavoriteMovie) {
+        Snackbar.make(view, getString(R.string.dislikeTitleSnack), Snackbar.LENGTH_LONG).apply {
+            setAction(getString(R.string.cancelSnack)){
+                viewModel.insertMovie(favoriteMovie)
+            }
+            show()
+        }
+    }
 
 
 }

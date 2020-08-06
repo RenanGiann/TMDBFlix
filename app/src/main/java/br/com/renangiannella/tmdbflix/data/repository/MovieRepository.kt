@@ -38,6 +38,10 @@ class MovieRepository(context: Context) {
         favoriteDAO.deleteFavoriteMovie(favoriteMovie)
     }
 
+    suspend fun deleteUser(user: User) {
+        userDAO.deleteUser(user)
+    }
+
     suspend fun getMoviePopular(apiKey: String, language: String) = APIService.service.getMoviesPopular(apiKey, language)
     suspend fun getMovieGenre(apiKey: String, language: String, genre: Int) = APIService.service.getMoviesGenre(apiKey, language, genre)
     suspend fun searchMovies(query: String, apiKey: String, language: String): MovieResponse = APIService.service.searchMovies(query, apiKey, language)
