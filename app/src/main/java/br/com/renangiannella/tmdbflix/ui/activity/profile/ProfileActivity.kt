@@ -19,7 +19,7 @@ class ProfileActivity : AppCompatActivity() {
 
     lateinit var viewModel: ProfileViewModel
     lateinit var userEmail: String
-    lateinit var user: User
+    lateinit var mUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +42,9 @@ class ProfileActivity : AppCompatActivity() {
                 nameProfile.text = user.name
                 emailProfile.text = user.email
                 passwordProfile.text = user.password
+                mUser = user
             }
         })
-
 
         btnLogout.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -57,13 +57,7 @@ class ProfileActivity : AppCompatActivity() {
     fun deleteUser() {
         btnDeleteAccount.setOnClickListener {
             it?.let {
-                viewModel.deleteUser(
-                    User(
-                        user.name,
-                        user.email,
-                        user.password
-                    )
-                )
+                viewModel.deleteUser(mUser)
             }
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
