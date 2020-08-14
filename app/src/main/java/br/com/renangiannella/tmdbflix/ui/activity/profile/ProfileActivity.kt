@@ -39,7 +39,7 @@ class ProfileActivity : AppCompatActivity() {
 
         viewModel.getUserbyEmail(userEmail).observe(this, Observer {
             it?.let { user ->
-                nameProfile.text = user.name
+                nameProfile.text = "Olá, ${user.name}"
                 emailProfile.text = user.email
                 passwordProfile.text = user.password
                 mUser = user
