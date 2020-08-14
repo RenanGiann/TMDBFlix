@@ -9,6 +9,7 @@ import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.FavoriteDAO
 import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.UserDAO
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.network.APIService
+import retrofit2.Response
 
 class MovieRepository(context: Context) {
 
@@ -45,6 +46,6 @@ class MovieRepository(context: Context) {
     suspend fun getMoviePopular(apiKey: String, language: String) = APIService.service.getMoviesPopular(apiKey, language)
     suspend fun getMovieGenre(apiKey: String, language: String, genre: Int) = APIService.service.getMoviesGenre(apiKey, language, genre)
     suspend fun searchMovies(query: String, apiKey: String, language: String): MovieResponse = APIService.service.searchMovies(query, apiKey, language)
-
+    suspend fun getTopRatedMovies(apiKey: String, language: String): Response<MovieResponse> = APIService.service.getTopRatedMovies(apiKey, language)
 }
 
