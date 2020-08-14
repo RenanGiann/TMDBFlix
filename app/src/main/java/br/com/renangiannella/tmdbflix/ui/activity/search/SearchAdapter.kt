@@ -11,11 +11,12 @@ import br.com.renangiannella.tmdbflix.data.model.result.MovieResult
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class SearchAdapter(val movies: List<MovieResult>,
-                    val favorite: List<FavoriteMovie>,
-                    val clickMovie: ((movie: MovieResult)-> Unit),
-                    val clickLike: ((movie: MovieResult)-> Unit),
-                    val clickDislike:((movie: MovieResult)-> Unit)):
+class SearchAdapter(
+    val movies: List<MovieResult>,
+    val favorite: List<FavoriteMovie>,
+    val clickMovie: ((movie: MovieResult)-> Unit),
+    val clickLike: ((movie: MovieResult)-> Unit),
+    val clickDislike:((movie: MovieResult)-> Unit)):
     RecyclerView.Adapter<SearchAdapter.SearchAdapterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.SearchAdapterViewHolder {

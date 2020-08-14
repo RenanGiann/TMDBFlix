@@ -1,11 +1,10 @@
 package br.com.renangiannella.tmdbflix.ui.activity.search
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import br.com.renangiannella.tmdbflix.BuildConfig
@@ -13,18 +12,13 @@ import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.core.Status
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
-import br.com.renangiannella.tmdbflix.data.model.result.MovieResult
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
-import br.com.renangiannella.tmdbflix.ui.activity.favorite.FavoriteAdapter
+import br.com.renangiannella.tmdbflix.data.utils.Utils
+import br.com.renangiannella.tmdbflix.data.utils.Utils.hideKeyboard
 import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
-import br.com.renangiannella.tmdbflix.ui.fragment.adapter.MovieAdapter
-import kotlinx.android.synthetic.main.activity_favorite.*
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.fragment_popular.*
 import kotlinx.android.synthetic.main.include_toobar.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class SearchActivity : AppCompatActivity() {
 
@@ -43,7 +37,29 @@ class SearchActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val repository = MovieRepository(this)
-        viewModel = SearchViewModel.SearchViewModelFactory(repository, Dispatchers.IO).create(SearchViewModel::class.java)
+        viewModel = SearchViewModel.SearchViewModelFactory(repository, Dispatchers.IO)
+            .create(SearchViewModel::class.java)
+
+        viewModel.getTopRatedMovies(BuildConfig.API_KEY, "pt-BR")
+
+        viewModel.movieResponse.observe(this, Observer { response ->
+            when (response.status) {
+                Status.SUCCESS -> {
+                    response.data?.let {
+                        setupRecycleView(it)
+                    }
+                }
+                Status.ERROR -> {
+                    response.errorMessage?.let {
+                        Log.d("Top Rated Activity", "Error Message $it")
+                    }
+                }
+
+                Status.LOADING -> {
+
+                }
+            }
+        })
 
         HomeActivity.getData(this)?.let {
             userEmail = it
@@ -76,6 +92,7 @@ class SearchActivity : AppCompatActivity() {
                 query?.let {
                     viewModel.searchMovies(it, BuildConfig.API_KEY, "pt-BR")
                 }
+                hideKeyboard()
                 return true
             }
 
@@ -116,7 +133,6 @@ class SearchActivity : AppCompatActivity() {
             adapter = searchAdapter
         }
     }
-
 
 }
 

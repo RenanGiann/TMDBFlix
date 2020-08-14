@@ -13,6 +13,10 @@ class FavoriteViewModel(val repository: MovieRepository, private val ioDispatche
 
     fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
 
+    fun insertMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
+        repository.insertFavoriteMovie(favoriteMovie)
+    }
+
     fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         repository.deleteFavoriteMovie(favoriteMovie)
     }

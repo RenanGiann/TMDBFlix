@@ -35,6 +35,8 @@
         android:padding="12dp"
         android:textColor="@color/colorDrawable"
         android:textColorHint="@color/orange"
+        android:inputType="text"
+        android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@+id/edtEmailRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -51,6 +53,8 @@
         android:padding="12dp"
         android:textColor="@color/colorDrawable"
         android:textColorHint="@color/orange"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@+id/edtPasswordRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -67,6 +71,8 @@
         android:padding="12dp"
         android:textColor="@color/colorDrawable"
         android:textColorHint="@color/orange"
+        android:inputType="numberPassword"
+        android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
