@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TMDBFlix</string>
+    <string name="dislikeTitleSnack">Ops..pelo jeito você não gostou desse filme</string>
+    <string name="cancelSnack">Cancelar</string>
 </resources>
