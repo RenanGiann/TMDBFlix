@@ -65,12 +65,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-//    fun hideKeyboard(){
-//        val view = this.currentFocus
-//        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.hideSoftInputFromWindow(view?.windowToken, 0)
-//    }
-
     companion object {
         const val USER = "USER"
     }
