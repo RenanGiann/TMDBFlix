@@ -1,11 +1,10 @@
 package br.com.renangiannella.tmdbflix.ui.activity.search
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import br.com.renangiannella.tmdbflix.BuildConfig
@@ -14,10 +13,10 @@ import br.com.renangiannella.tmdbflix.core.Status
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
+import br.com.renangiannella.tmdbflix.data.utils.Utils
+import br.com.renangiannella.tmdbflix.data.utils.Utils.hideKeyboard
 import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
-import kotlinx.android.synthetic.main.activity_favorite.*
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.fragment_popular.*
 import kotlinx.android.synthetic.main.include_toobar.*
 import kotlinx.coroutines.Dispatchers
 
@@ -59,9 +58,7 @@ class SearchActivity : AppCompatActivity() {
                 Status.LOADING -> {
 
                 }
-
             }
-
         })
 
         HomeActivity.getData(this)?.let {
@@ -95,6 +92,7 @@ class SearchActivity : AppCompatActivity() {
                 query?.let {
                     viewModel.searchMovies(it, BuildConfig.API_KEY, "pt-BR")
                 }
+                hideKeyboard()
                 return true
             }
 
@@ -135,7 +133,6 @@ class SearchActivity : AppCompatActivity() {
             adapter = searchAdapter
         }
     }
-
 
 }
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import br.com.renangiannella.tmdbflix.data.utils.SharedPreference
+import br.com.renangiannella.tmdbflix.data.utils.Utils.hideKeyboard
 import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
 import br.com.renangiannella.tmdbflix.ui.activity.register.RegisterActivity
 import kotlinx.android.synthetic.main.activity_login.*
@@ -64,11 +65,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun hideKeyboard(){
-        val view = this.currentFocus
-        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view?.windowToken, 0)
-    }
+//    fun hideKeyboard(){
+//        val view = this.currentFocus
+//        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+//    }
 
     companion object {
         const val USER = "USER"
