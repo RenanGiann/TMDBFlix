@@ -75,6 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textVoteAverage" />
 
+
         <ImageView
             android:id="@+id/img_favorite_red"
             android:layout_width="40dp"
@@ -85,6 +86,29 @@
             app:layout_constraintBottom_toBottomOf="@+id/textVoteAverage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textVoteAverage" />
+
+        <ImageView
+            android:id="@+id/img_diswatch"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="7dp"
+            android:alpha="0.5"
+            android:background="@drawable/ic_assistido"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/img_favorite_movie"
+            app:layout_constraintStart_toStartOf="@+id/img_favorite_movie" />
+
+        <ImageView
+            android:id="@+id/img_towatch"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="7dp"
+            android:alpha="0.5"
+            android:background="@drawable/ic_assistir"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/img_favorite_movie"
+            app:layout_constraintStart_toStartOf="@+id/img_favorite_movie" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

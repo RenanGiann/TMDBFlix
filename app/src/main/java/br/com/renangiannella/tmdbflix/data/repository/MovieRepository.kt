@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import br.com.renangiannella.tmdbflix.data.db.TMDBFlixDataBase
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.db.modeldb.User
+import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.FavoriteDAO
 import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.UserDAO
+import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.WatchDAO
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.network.APIService
 import retrofit2.Response
@@ -19,6 +21,10 @@ class MovieRepository(context: Context) {
 
     private val favoriteDAO: FavoriteDAO by lazy {
         TMDBFlixDataBase.getDB(context).favoriteDAO()
+    }
+
+    private val watchDAO: WatchDAO by lazy {
+        TMDBFlixDataBase.getDB(context).watchDAO()
     }
 
     suspend fun insertUser(user: User) {
@@ -42,6 +48,12 @@ class MovieRepository(context: Context) {
     suspend fun deleteUser(user: User) {
         userDAO.deleteUser(user)
     }
+
+    fun getWatchMovie(userEmail: String): LiveData<List<WatchMovie>> = watchDAO.getWatchMovie(userEmail)
+
+    suspend fun insertWatchMovie(watchMovie: WatchMovie) = watchDAO.insertMovieWatch(watchMovie)
+
+    suspend fun deleteWatchMovie(watchMovie: WatchMovie) = watchDAO.deleteWatchMovie(watchMovie)
 
     suspend fun getMoviePopular(apiKey: String, language: String) = APIService.service.getMoviesPopular(apiKey, language)
     suspend fun getMovieGenre(apiKey: String, language: String, genre: Int) = APIService.service.getMoviesGenre(apiKey, language, genre)

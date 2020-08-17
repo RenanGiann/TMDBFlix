@@ -11,7 +11,9 @@ import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class FavoriteAdapter(val favorites: List<FavoriteMovie>, val clickMovie: ((movie: FavoriteMovie)-> Unit), val clickDislike:((movie: FavoriteMovie)-> Unit)):
+class FavoriteAdapter(val favorites: List<FavoriteMovie>,
+                      val clickMovie: ((movie: FavoriteMovie)-> Unit),
+                      val clickDislike:((movie: FavoriteMovie)-> Unit)):
     RecyclerView.Adapter<FavoriteAdapter.MovieAdapterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteAdapter.MovieAdapterViewHolder {

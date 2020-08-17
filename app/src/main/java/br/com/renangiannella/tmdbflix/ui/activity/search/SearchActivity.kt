@@ -11,6 +11,7 @@ import br.com.renangiannella.tmdbflix.BuildConfig
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.core.Status
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
+import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import br.com.renangiannella.tmdbflix.data.utils.Utils
@@ -26,6 +27,7 @@ class SearchActivity : AppCompatActivity() {
     lateinit var searchAdapter: SearchAdapter
     lateinit var userEmail: String
     var listFavorite = listOf<FavoriteMovie>()
+    var listWatch = listOf<WatchMovie>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +73,12 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
+        viewModel.getWatchMovie(userEmail).observe(this, Observer {
+            it?.let {
+                listWatch = it
+            }
+        })
+
         viewModel.searchResponse.observe(this, Observer {
             loading.visibility = if (it.loading == true) VISIBLE else GONE
             when (it.status) {
@@ -106,7 +114,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupRecycleView(result: MovieResponse) {
-        searchAdapter = SearchAdapter(result.results, listFavorite, {}, { movieResult ->
+        searchAdapter = SearchAdapter(result.results, listFavorite, listWatch, {}, { movieResult ->
             viewModel.insertMovie(
                 FavoriteMovie(
                     movieResult.id,
@@ -122,6 +130,27 @@ class SearchActivity : AppCompatActivity() {
         }, {
             viewModel.deleteMovie(
                 FavoriteMovie(
+                    it.id, userEmail, it.poster_path, it.overview, it.release_date,
+                    it.genre_ids, it.original_title, it.vote_average
+                )
+            )
+        }, {
+
+            viewModel.insertWatchMovie(
+                WatchMovie(
+                    it.id,
+                    userEmail,
+                    it.poster_path,
+                    it.overview,
+                    it.release_date,
+                    it.genre_ids,
+                    it.original_title,
+                    it.vote_average
+                )
+            )
+        }, {
+            viewModel.deleteWatchMovie(
+                WatchMovie(
                     it.id, userEmail, it.poster_path, it.overview, it.release_date,
                     it.genre_ids, it.original_title, it.vote_average
                 )
