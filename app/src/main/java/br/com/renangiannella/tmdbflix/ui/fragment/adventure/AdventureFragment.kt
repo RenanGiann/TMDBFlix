@@ -54,7 +54,7 @@ class AdventureFragment: Fragment() {
                 }
             })
 
-            viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.genreMovieResponse.observe(viewLifecycleOwner, Observer { response ->
                 loadingAdventure.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {

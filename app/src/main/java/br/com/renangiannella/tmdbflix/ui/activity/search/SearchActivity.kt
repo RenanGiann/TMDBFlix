@@ -40,9 +40,12 @@ class SearchActivity : AppCompatActivity() {
         viewModel = SearchViewModel.SearchViewModelFactory(repository, Dispatchers.IO)
             .create(SearchViewModel::class.java)
 
+        viewModel = SearchViewModel.SearchViewModelFactory(repository, Dispatchers.IO)
+            .create(SearchViewModel::class.java)
+
         viewModel.getTopRatedMovies(BuildConfig.API_KEY, "pt-BR")
 
-        viewModel.movieResponse.observe(this, Observer { response ->
+        viewModel.topRatedMovieResponse.observe(this, Observer { response ->
             when (response.status) {
                 Status.SUCCESS -> {
                     response.data?.let {

@@ -55,7 +55,7 @@ class ActionFragment: Fragment() {
                 }
             })
 
-            viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.genreMovieResponse.observe(viewLifecycleOwner, Observer { response ->
                 loadingAction.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {
