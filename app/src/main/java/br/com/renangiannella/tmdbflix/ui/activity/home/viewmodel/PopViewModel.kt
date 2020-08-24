@@ -17,7 +17,7 @@ class PopViewModel(val repository: MovieRepository, private val ioDispatcher: Co
 
     fun getPopularMovie(apiKey: String, language: String) = viewModelScope.launch {
         try {
-            movieResponse.value = State.loading(true)
+            popMovieResponse.value = State.loading(true)
             val _response = withContext(ioDispatcher) {
                 repository.getMoviePopular(apiKey, language)
             }

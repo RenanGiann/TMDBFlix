@@ -46,7 +46,7 @@ class ComedyFragment: Fragment() {
                 userEmail = loggedUser
             }
 
-            viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", idComedy)
+            viewModel.getComedyMovie(BuildConfig.API_KEY, "pt-BR", idComedy)
 
             viewModel.getFavoriteMovie(userEmail).observe(viewLifecycleOwner, Observer {
                 it?.let {
@@ -54,7 +54,7 @@ class ComedyFragment: Fragment() {
                 }
             })
 
-            viewModel.genreMovieResponse.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.comedyMovieResponse.observe(viewLifecycleOwner, Observer { response ->
                 loadingComedy.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {

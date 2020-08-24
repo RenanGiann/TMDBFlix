@@ -64,9 +64,9 @@ class HomeActivity : AppCompatActivity() {
 
     fun refresh() {
         popViewModel.getPopularMovie(BuildConfig.API_KEY, "pt-BR")
-        viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", 28)
-        viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", 12)
-        viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", 35)
+        viewModel.getActionMovie(BuildConfig.API_KEY, "pt-BR", 28)
+        viewModel.getAdventureMovie(BuildConfig.API_KEY, "pt-BR", 12)
+        viewModel.getComedyMovie(BuildConfig.API_KEY, "pt-BR", 35)
     }
 
     override fun onResume() {

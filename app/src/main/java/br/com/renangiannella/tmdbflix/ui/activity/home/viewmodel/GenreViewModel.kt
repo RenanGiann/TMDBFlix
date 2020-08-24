@@ -14,17 +14,45 @@ import retrofit2.Response
 class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
 
     val movieResponse = MutableLiveData<State<MovieResponse>>()
-    val genreMovieResponse = MutableLiveData<State<MovieResponse>>()
+    val actionMovieResponse = MutableLiveData<State<MovieResponse>>()
+    val comedyMovieResponse = MutableLiveData<State<MovieResponse>>()
+    val adventureMovieResponse = MutableLiveData<State<MovieResponse>>()
 
-    fun getGenreMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
+    fun getActionMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
         try {
-            genreMovieResponse.value = State.loading(true)
+            actionMovieResponse.value = State.loading(true)
             val _response= withContext(ioDispatcher) {
                 repository.getMovieGenre(apiKey, language, genre)
             }
-            genreMovieResponse.value = State.success(_response)
+            actionMovieResponse.value = State.success(_response)
         } catch (t: Throwable) {
-            genreMovieResponse.postValue(State.error(t))
+            actionMovieResponse.postValue(State.error(t))
+        }
+
+    }
+
+    fun getComedyMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
+        try {
+            comedyMovieResponse.value = State.loading(true)
+            val _response= withContext(ioDispatcher) {
+                repository.getMovieGenre(apiKey, language, genre)
+            }
+            comedyMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            comedyMovieResponse.postValue(State.error(t))
+        }
+
+    }
+
+    fun getAdventureMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
+        try {
+            adventureMovieResponse.value = State.loading(true)
+            val _response= withContext(ioDispatcher) {
+                repository.getMovieGenre(apiKey, language, genre)
+            }
+            adventureMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            adventureMovieResponse.postValue(State.error(t))
         }
 
     }
