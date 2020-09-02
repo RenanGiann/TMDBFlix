@@ -56,7 +56,7 @@ class PopularFragment: Fragment() {
                 }
             })
 
-            viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.popMovieResponse.observe(viewLifecycleOwner, Observer { response ->
                 loadingPop.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {

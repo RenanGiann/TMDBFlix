@@ -13,28 +13,25 @@ import retrofit2.Response
 class PopViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
 
     val movieResponse = MutableLiveData<State<MovieResponse>>()
+    val popMovieResponse = MutableLiveData<State<MovieResponse>>()
 
     fun getPopularMovie(apiKey: String, language: String) = viewModelScope.launch {
-        movieResponse.value = State.loading(true)
-        val response = withContext(ioDispatcher) {
-            repository.getMoviePopular(apiKey, language)
+        try {
+            popMovieResponse.value = State.loading(true)
+            val _response = withContext(ioDispatcher) {
+                repository.getMoviePopular(apiKey, language)
+            }
+            popMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            popMovieResponse.postValue(State.error(t))
         }
-        movieResponse.postValue(randomMovieResponse(response))
+
     }
 
     fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
 
     fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         repository.deleteFavoriteMovie(favoriteMovie)
-    }
-
-    fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return State.success(resultResponse)
-            }
-        }
-        return State.errorMessage(response.message(), response.code())
     }
 
     fun insertMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
