@@ -14,28 +14,53 @@ import retrofit2.Response
 class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
 
     val movieResponse = MutableLiveData<State<MovieResponse>>()
+    val actionMovieResponse = MutableLiveData<State<MovieResponse>>()
+    val comedyMovieResponse = MutableLiveData<State<MovieResponse>>()
+    val adventureMovieResponse = MutableLiveData<State<MovieResponse>>()
 
-    fun getGenreMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
-        movieResponse.value = State.loading(true)
-        val response = withContext(ioDispatcher) {
-            repository.getMovieGenre(apiKey, language, genre)
+    fun getActionMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
+        try {
+            actionMovieResponse.value = State.loading(true)
+            val _response= withContext(ioDispatcher) {
+                repository.getMovieGenre(apiKey, language, genre)
+            }
+            actionMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            actionMovieResponse.postValue(State.error(t))
         }
-        movieResponse.postValue(randomMovieResponse(response))
+
+    }
+
+    fun getComedyMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
+        try {
+            comedyMovieResponse.value = State.loading(true)
+            val _response= withContext(ioDispatcher) {
+                repository.getMovieGenre(apiKey, language, genre)
+            }
+            comedyMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            comedyMovieResponse.postValue(State.error(t))
+        }
+
+    }
+
+    fun getAdventureMovie(apiKey: String, language: String, genre: Int) = viewModelScope.launch {
+        try {
+            adventureMovieResponse.value = State.loading(true)
+            val _response= withContext(ioDispatcher) {
+                repository.getMovieGenre(apiKey, language, genre)
+            }
+            adventureMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            adventureMovieResponse.postValue(State.error(t))
+        }
+
     }
 
     fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
 
     fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         repository.deleteFavoriteMovie(favoriteMovie)
-    }
-
-    fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return State.success(resultResponse)
-            }
-        }
-        return State.errorMessage(response.message(), response.code())
     }
 
     fun insertMovie(favoriteMovie: FavoriteMovie) =

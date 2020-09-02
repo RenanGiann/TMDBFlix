@@ -15,13 +15,18 @@ class SearchViewModel(val repository: MovieRepository, private val ioDispatcher:
 
     val movieResponse = MutableLiveData<State<MovieResponse>>()
     val searchResponse = MutableLiveData<State<MovieResponse>>()
+    val topRatedMovieResponse = MutableLiveData<State<MovieResponse>>()
 
     fun getTopRatedMovies(apiKey: String, language: String) = viewModelScope.launch {
-        movieResponse.value = State.loading(true)
-        val response = withContext(ioDispatcher) {
-            repository.getTopRatedMovies(apiKey, language)
+        try {
+            topRatedMovieResponse.value = State.loading(true)
+            val _response = withContext(ioDispatcher) {
+                repository.getTopRatedMovies(apiKey, language)
+            }
+            topRatedMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            topRatedMovieResponse.postValue(State.error(t))
         }
-        movieResponse.postValue(randomMovieResponse(response))
     }
 
     fun searchMovies(query: String, apiKey: String, language: String) = viewModelScope.launch {
@@ -40,15 +45,6 @@ class SearchViewModel(val repository: MovieRepository, private val ioDispatcher:
 
     fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         repository.deleteFavoriteMovie(favoriteMovie)
-    }
-
-    fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return State.success(resultResponse)
-            }
-        }
-        return State.errorMessage(response.message(), response.code())
     }
 
     fun insertMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {

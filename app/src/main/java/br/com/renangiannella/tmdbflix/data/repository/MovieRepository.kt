@@ -43,9 +43,9 @@ class MovieRepository(context: Context) {
         userDAO.deleteUser(user)
     }
 
-    suspend fun getMoviePopular(apiKey: String, language: String) = APIService.service.getMoviesPopular(apiKey, language)
-    suspend fun getMovieGenre(apiKey: String, language: String, genre: Int) = APIService.service.getMoviesGenre(apiKey, language, genre)
+    suspend fun getMoviePopular(apiKey: String, language: String): MovieResponse = APIService.service.getMoviesPopular(apiKey, language)
+    suspend fun getMovieGenre(apiKey: String, language: String, genre: Int): MovieResponse = APIService.service.getMoviesGenre(apiKey, language, genre)
     suspend fun searchMovies(query: String, apiKey: String, language: String): MovieResponse = APIService.service.searchMovies(query, apiKey, language)
-    suspend fun getTopRatedMovies(apiKey: String, language: String): Response<MovieResponse> = APIService.service.getTopRatedMovies(apiKey, language)
+    suspend fun getTopRatedMovies(apiKey: String, language: String): MovieResponse = APIService.service.getTopRatedMovies(apiKey, language)
 }
 

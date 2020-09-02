@@ -42,7 +42,7 @@ class AdventureFragment: Fragment() {
             viewModel = (it as HomeActivity).viewModel
             val idAdventure: Int = 12
 
-            viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", idAdventure)
+            viewModel.getAdventureMovie(BuildConfig.API_KEY, "pt-BR", idAdventure)
 
             HomeActivity.getData(it)?.let {loggedUser ->
                 userEmail = loggedUser
@@ -54,7 +54,7 @@ class AdventureFragment: Fragment() {
                 }
             })
 
-            viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.adventureMovieResponse.observe(viewLifecycleOwner, Observer { response ->
                 loadingAdventure.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {
