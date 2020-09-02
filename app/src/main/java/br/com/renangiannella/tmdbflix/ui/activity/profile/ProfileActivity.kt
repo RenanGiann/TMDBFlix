@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.renangiannella.tmdbflix.ClickListener
@@ -80,7 +81,7 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             recyclerView.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
                 setHasFixedSize(true)
                 adapter = profileAdapter
             }
@@ -92,7 +93,10 @@ class ProfileActivity : AppCompatActivity() {
         deleteUser()
     }
 
-    fun imageList() = listOf(R.drawable.one_piece, R.drawable.coyote, R.drawable.taz)
+    fun imageList() = listOf(R.drawable.avatar1, R.drawable.avatar2,
+        R.drawable.avatar3, R.drawable.avatar4,
+        R.drawable.avatar5, R.drawable.avatar6,
+        R.drawable.avatar7, R.drawable.avatar8)
 
     fun deleteUser() {
         btnDeleteAccount.setOnClickListener {
