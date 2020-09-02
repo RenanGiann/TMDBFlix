@@ -28,7 +28,7 @@
         tools:text="Renan" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imgProfile"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="20dp"
@@ -39,9 +39,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameProfile" />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/btnEditIcon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:elevation="4dp"
+        android:src="@drawable/ic_edit"
+        android:background="@color/whiteTransition"
+        app:layout_constraintBottom_toBottomOf="@+id/imgProfile"
+        app:layout_constraintEnd_toEndOf="@+id/imgProfile"
+        app:layout_constraintTop_toTopOf="@+id/imgProfile" />
 
     <TextView
         android:id="@+id/textView2"
@@ -53,7 +61,7 @@
         android:textColor="@color/gray"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imgProfile" />
 
     <TextView
         android:id="@+id/emailProfile"
