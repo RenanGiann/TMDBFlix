@@ -27,15 +27,29 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbarMovies"
         tools:text="Renan" />
 
-    <ImageView
-        android:id="@+id/imageView2"
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/imgProfile"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_profile"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
+        android:src="@drawable/avatar1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameProfile" />
+
+    <ImageButton
+        android:id="@+id/btnEditIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:elevation="4dp"
+        android:src="@drawable/ic_edit"
+        android:background="@color/whiteTransition"
+        app:layout_constraintBottom_toBottomOf="@+id/imgProfile"
+        app:layout_constraintEnd_toEndOf="@+id/imgProfile"
+        app:layout_constraintTop_toTopOf="@+id/imgProfile" />
 
     <TextView
         android:id="@+id/textView2"
@@ -47,7 +61,7 @@
         android:textColor="@color/gray"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imgProfile" />
 
     <TextView
         android:id="@+id/emailProfile"
@@ -93,22 +107,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="120dp"
-        android:layout_marginBottom="30dp"
         android:background="@drawable/background_button"
         android:backgroundTint="@color/red"
         android:fontFamily="sans-serif-black"
         android:text="Deletar Conta"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/image_filme"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogout" />
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
+        android:layout_marginTop="140dp"
         android:layout_marginEnd="120dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/background_button"
@@ -118,12 +133,13 @@
         app:layout_constraintBottom_toTopOf="@+id/btnDeleteAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordProfile" />
 
     <ImageView
         android:id="@+id/image_filme"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="150dp"
         android:layout_marginBottom="7dp"
         android:alpha="0.2"
         android:color="#0A7E7E7E"

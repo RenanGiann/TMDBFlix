@@ -39,25 +39,31 @@ class MovieRepository(context: Context) {
         favoriteDAO.insertMovie(favoriteMovie)
     }
 
+    suspend fun insertWatchMovie(watchMovie: WatchMovie) {
+        watchDAO.insertMovieWatch(watchMovie)
+    }
+
+
     fun getFavoriteMovie(userEmail: String) : LiveData<List<FavoriteMovie>> = favoriteDAO.getFavoriteMovie(userEmail)
+
+    fun getWatchMovie(userEmail: String): LiveData<List<WatchMovie>> = watchDAO.getWatchMovie(userEmail)
+
 
     suspend fun deleteFavoriteMovie(favoriteMovie: FavoriteMovie) {
         favoriteDAO.deleteFavoriteMovie(favoriteMovie)
+    }
+
+    suspend fun deleteWatchMovie(watchMovie: WatchMovie) {
+        watchDAO.deleteWatchMovie(watchMovie)
     }
 
     suspend fun deleteUser(user: User) {
         userDAO.deleteUser(user)
     }
 
-    fun getWatchMovie(userEmail: String): LiveData<List<WatchMovie>> = watchDAO.getWatchMovie(userEmail)
-
-    suspend fun insertWatchMovie(watchMovie: WatchMovie) = watchDAO.insertMovieWatch(watchMovie)
-
-    suspend fun deleteWatchMovie(watchMovie: WatchMovie) = watchDAO.deleteWatchMovie(watchMovie)
-
-    suspend fun getMoviePopular(apiKey: String, language: String) = APIService.service.getMoviesPopular(apiKey, language)
-    suspend fun getMovieGenre(apiKey: String, language: String, genre: Int) = APIService.service.getMoviesGenre(apiKey, language, genre)
+    suspend fun getMoviePopular(apiKey: String, language: String): MovieResponse = APIService.service.getMoviesPopular(apiKey, language)
+    suspend fun getMovieGenre(apiKey: String, language: String, genre: Int): MovieResponse = APIService.service.getMoviesGenre(apiKey, language, genre)
     suspend fun searchMovies(query: String, apiKey: String, language: String): MovieResponse = APIService.service.searchMovies(query, apiKey, language)
-    suspend fun getTopRatedMovies(apiKey: String, language: String): Response<MovieResponse> = APIService.service.getTopRatedMovies(apiKey, language)
+    suspend fun getTopRatedMovies(apiKey: String, language: String): MovieResponse = APIService.service.getTopRatedMovies(apiKey, language)
 }
 

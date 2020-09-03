@@ -13,13 +13,13 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class WatchAdapter(val watch: List<WatchMovie>,
-                   val clickWatchMovie: ((movie: WatchMovie) -> Unit),
+                   val clickMovie: ((movie: WatchMovie) -> Unit),
                    val clickDisWatchMovie: ((movie: WatchMovie) -> Unit)):
     RecyclerView.Adapter<WatchAdapter.MovieAdapterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WatchAdapter.MovieAdapterViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
-        return WatchAdapter.MovieAdapterViewHolder(itemView, clickWatchMovie, clickDisWatchMovie)
+        return MovieAdapterViewHolder(itemView, clickMovie, clickDisWatchMovie)
     }
 
     override fun getItemCount() = watch.count()
@@ -31,7 +31,7 @@ class WatchAdapter(val watch: List<WatchMovie>,
     fun getCurrentMovie(position: Int) = watch[position]
 
     class MovieAdapterViewHolder(itemView: View,
-                                 val clickWatchMovie: ((movie: WatchMovie)-> Unit),
+                                 val clickMovie: ((movie: WatchMovie)-> Unit),
                                  val clickDisWatchMovie:((movie: WatchMovie)-> Unit)): RecyclerView.ViewHolder(itemView) {
 
         private val title = itemView.textNameMovie

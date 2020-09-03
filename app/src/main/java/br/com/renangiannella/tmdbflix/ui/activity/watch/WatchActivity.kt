@@ -52,7 +52,7 @@ class WatchActivity : AppCompatActivity() {
                         viewModel.deleteWatchMovie(watch)
                         showSnackBar(recyclerWatch, watch)
                     })
-                    layoutManager = GridLayoutManager(this@WatchActivity, 2)
+                    layoutManager = GridLayoutManager(this@WatchActivity, 3)
                     setHasFixedSize(true)
                     adapter = watchAdapter
                 }

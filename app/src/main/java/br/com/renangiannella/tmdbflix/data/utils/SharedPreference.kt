@@ -19,4 +19,12 @@ class SharedPreference(context: Context) {
         editor.apply()
     }
 
+    fun saveImage(key: String, value: Int){
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+        editor.putInt(key,value)
+        editor.apply()
+    }
+
+    fun getSavedImage(key: String): Int? = sharedPref.getInt(key, 0)
+
 }

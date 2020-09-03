@@ -3,6 +3,7 @@ package br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel
 import androidx.lifecycle.*
 import br.com.renangiannella.tmdbflix.core.State
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
+import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -13,13 +14,19 @@ import retrofit2.Response
 class PopViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
 
     val movieResponse = MutableLiveData<State<MovieResponse>>()
+    val popMovieResponse = MutableLiveData<State<MovieResponse>>()
 
     fun getPopularMovie(apiKey: String, language: String) = viewModelScope.launch {
-        movieResponse.value = State.loading(true)
-        val response = withContext(ioDispatcher) {
-            repository.getMoviePopular(apiKey, language)
+        try {
+            popMovieResponse.value = State.loading(true)
+            val _response = withContext(ioDispatcher) {
+                repository.getMoviePopular(apiKey, language)
+            }
+            popMovieResponse.value = State.success(_response)
+        } catch (t: Throwable) {
+            popMovieResponse.postValue(State.error(t))
         }
-        movieResponse.postValue(randomMovieResponse(response))
+
     }
 
     fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
@@ -28,17 +35,18 @@ class PopViewModel(val repository: MovieRepository, private val ioDispatcher: Co
         repository.deleteFavoriteMovie(favoriteMovie)
     }
 
-    fun randomMovieResponse(response: Response<MovieResponse>): State<MovieResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return State.success(resultResponse)
-            }
-        }
-        return State.errorMessage(response.message(), response.code())
-    }
-
     fun insertMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         repository.insertFavoriteMovie(favoriteMovie)
+    }
+
+    fun getWatchMovie(userEmail: String): LiveData<List<WatchMovie>> = repository.getWatchMovie(userEmail)
+
+    fun deleteWatchMovie(watchMovie: WatchMovie) = viewModelScope.launch {
+        repository.deleteWatchMovie(watchMovie)
+    }
+
+    fun insertWatchMovie(watchMovie: WatchMovie) = viewModelScope.launch {
+        repository.insertWatchMovie(watchMovie)
     }
 
     class MovieViewModelProviderFactory(val repository: MovieRepository, val ioDispatcher: CoroutineDispatcher) : ViewModelProvider.Factory {

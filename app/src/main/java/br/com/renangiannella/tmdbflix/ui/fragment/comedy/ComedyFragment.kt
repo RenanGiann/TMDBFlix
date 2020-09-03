@@ -13,12 +13,14 @@ import br.com.renangiannella.tmdbflix.BuildConfig
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.core.Status
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
+import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.model.result.MovieResult
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
 import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.GenreViewModel
 import br.com.renangiannella.tmdbflix.ui.fragment.MovieGenreViewModelProviderFactory
 import br.com.renangiannella.tmdbflix.ui.fragment.adapter.MovieAdapter
+import kotlinx.android.synthetic.main.fragment_action.*
 import kotlinx.android.synthetic.main.fragment_comedy.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,6 +32,7 @@ class ComedyFragment: Fragment() {
     lateinit var viewModel: GenreViewModel
     lateinit var userEmail: String
     var listFavorite = listOf<FavoriteMovie>()
+    var listWatch = listOf<WatchMovie>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_comedy, container, false)
@@ -46,7 +49,7 @@ class ComedyFragment: Fragment() {
                 userEmail = loggedUser
             }
 
-            viewModel.getGenreMovie(BuildConfig.API_KEY, "pt-BR", idComedy)
+            viewModel.getComedyMovie(BuildConfig.API_KEY, "pt-BR", idComedy)
 
             viewModel.getFavoriteMovie(userEmail).observe(viewLifecycleOwner, Observer {
                 it?.let {
@@ -54,7 +57,13 @@ class ComedyFragment: Fragment() {
                 }
             })
 
-            viewModel.movieResponse.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.getWatchMovie(userEmail).observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    listWatch = it
+                }
+            })
+
+            viewModel.comedyMovieResponse.observe(viewLifecycleOwner, Observer { response ->
                 loadingComedy.visibility = if (response.loading == true) View.VISIBLE else View.GONE
                 when (response.status) {
                     Status.SUCCESS -> {
@@ -77,24 +86,41 @@ class ComedyFragment: Fragment() {
     }
 
     private fun setupRecyclerView(movies: List<MovieResult>) {
-        mAdapter = MovieAdapter(movies, listFavorite, {}, { movieResult ->
-                viewModel.insertMovie(
-                    FavoriteMovie(
-                        movieResult.id, userEmail, movieResult.poster_path,
-                        movieResult.overview, movieResult.release_date,
-                        movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
-                    )
+        mAdapter = MovieAdapter(movies, listFavorite, listWatch, {}, { movieResult ->
+            viewModel.insertMovie(
+                FavoriteMovie(
+                    movieResult.id, userEmail, movieResult.poster_path,
+                    movieResult.overview, movieResult.release_date,
+                    movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                 )
+            )
         }, { movieResult ->
-                viewModel.deleteMovie(
-                    FavoriteMovie(
-                        movieResult.id, userEmail, movieResult.poster_path,
-                        movieResult.overview, movieResult.release_date,
-                        movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
-                    )
+            viewModel.deleteMovie(
+                FavoriteMovie(
+                    movieResult.id, userEmail, movieResult.poster_path,
+                    movieResult.overview, movieResult.release_date,
+                    movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                 )
+            )
+        }, { movieResult ->
+            viewModel.insertWatchMovie(
+                WatchMovie(
+                    movieResult.id, userEmail, movieResult.poster_path,
+                    movieResult.overview, movieResult.release_date,
+                    movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
+                )
+            )
+
+        }, { movieResult ->
+            viewModel.deleteWatchMovie(
+                WatchMovie(
+                    movieResult.id, userEmail, movieResult.poster_path,
+                    movieResult.overview, movieResult.release_date,
+                    movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
+                )
+            )
         })
-        with(recyclerViewComedy) {
+        with(recyclerViewAction) {
             layoutManager = GridLayoutManager(activity, 2)
             setHasFixedSize(true)
             adapter = mAdapter

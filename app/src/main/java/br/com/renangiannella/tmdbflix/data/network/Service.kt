@@ -10,13 +10,13 @@ interface Service {
     @GET ("movie/popular")
     suspend fun getMoviesPopular(@Query("api_key") apiKey:String,
                                  @Query("language") language: String)
-            : Response<MovieResponse>
+            : MovieResponse
 
     @GET("discover/movie")
     suspend fun getMoviesGenre(@Query("api_key") apiKey: String,
                                @Query("language") language: String,
                                @Query("with_genres") genre: Int)
-            : Response<MovieResponse>
+            : MovieResponse
 
     @GET("search/movie")
     suspend fun searchMovies(@Query("query") query: String,
@@ -27,6 +27,6 @@ interface Service {
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(@Query("api_key") apiKey: String,
                                   @Query("language") language: String)
-            : Response<MovieResponse>
+            : MovieResponse
 
 }
