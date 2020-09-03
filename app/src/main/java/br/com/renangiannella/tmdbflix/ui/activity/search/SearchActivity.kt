@@ -131,7 +131,7 @@ class SearchActivity : AppCompatActivity() {
             )
         })
         recycleSearch.apply {
-            layoutManager = GridLayoutManager(this@SearchActivity, 2)
+            layoutManager = GridLayoutManager(this@SearchActivity, 3)
             setHasFixedSize(true)
             adapter = searchAdapter
         }
