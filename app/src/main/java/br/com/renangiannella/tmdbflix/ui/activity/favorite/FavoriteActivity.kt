@@ -54,7 +54,7 @@ class FavoriteActivity : AppCompatActivity() {
                         viewModel.deleteMovie(favorite)
                         showSnackBar(recyclerViewFavorite, favorite)
                     })
-                    layoutManager = GridLayoutManager(this@FavoriteActivity, 2)
+                    layoutManager = GridLayoutManager(this@FavoriteActivity, 3)
                     setHasFixedSize(true)
                     adapter = favoriteAdapter
                 }
