@@ -120,8 +120,8 @@ class ComedyFragment: Fragment() {
                 )
             )
         })
-        with(recyclerViewAction) {
-            layoutManager = GridLayoutManager(activity, 2)
+        with(recyclerViewComedy) {
+            layoutManager = GridLayoutManager(activity, 3)
             setHasFixedSize(true)
             adapter = mAdapter
         }

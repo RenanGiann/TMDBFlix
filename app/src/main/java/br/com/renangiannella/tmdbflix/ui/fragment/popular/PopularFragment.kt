@@ -123,8 +123,8 @@ class PopularFragment: Fragment() {
                 )
             )
         })
-        with(recyclerViewAction) {
-            layoutManager = GridLayoutManager(activity, 2)
+        with(recyclerViewPop) {
+            layoutManager = GridLayoutManager(activity, 3)
             setHasFixedSize(true)
             adapter = mAdapter
         }

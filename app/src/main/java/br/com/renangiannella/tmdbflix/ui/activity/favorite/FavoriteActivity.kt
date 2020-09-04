@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
+import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import br.com.renangiannella.tmdbflix.data.utils.SharedPreference
 import br.com.renangiannella.tmdbflix.ui.activity.favorite.viewmodel.FavoriteViewModel
@@ -27,6 +28,7 @@ class FavoriteActivity : AppCompatActivity() {
     lateinit var userEmail: String
     lateinit var viewModel: FavoriteViewModel
     lateinit var favoriteAdapter: FavoriteAdapter
+    var listWatch = listOf<WatchMovie>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +47,31 @@ class FavoriteActivity : AppCompatActivity() {
             userEmail = loggedUser
         }
 
+        viewModel.getWatchMovie(userEmail).observe(this, Observer {
+            it?.let {
+                listWatch = it
+            }
+        })
+
         deleteMovieSwipe(recyclerViewFavorite)
 
         viewModel.getFavoriteMovie(userEmail).observe(this, Observer {
             it?.let {
                 with(recyclerViewFavorite){
-                    favoriteAdapter = FavoriteAdapter(it, {}, {favorite ->
+                    favoriteAdapter = FavoriteAdapter(it, listWatch, {movieResult ->
+                        viewModel.insertWatchMovie(
+                            WatchMovie(
+                                movieResult.id, userEmail, movieResult.poster_path,
+                                movieResult.overview, movieResult.release_date,
+                                movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
+                            )
+                        )}, { watchResult ->
+                        viewModel.deleteWatchMovie(
+                            WatchMovie(watchResult.id, userEmail, watchResult.poster_path,
+                                watchResult.overview, watchResult.release_date,
+                                watchResult.genre_ids, watchResult.original_title, watchResult.vote_average)
+                        )
+                    }, {}, {favorite ->
                         viewModel.deleteMovie(favorite)
                         showSnackBar(recyclerViewFavorite, favorite)
                     })

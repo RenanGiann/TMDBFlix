@@ -122,7 +122,7 @@ class ActionFragment: Fragment() {
             )
         })
         with(recyclerViewAction) {
-            layoutManager = GridLayoutManager(activity, 2)
+            layoutManager = GridLayoutManager(activity, 3)
             setHasFixedSize(true)
             adapter = mAdapter
         }

@@ -26,6 +26,7 @@ class WatchActivity : AppCompatActivity() {
     lateinit var userEmail: String
     lateinit var viewModel: WatchViewModel
     lateinit var watchAdapter: WatchAdapter
+    var listFavorite = listOf<FavoriteMovie>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,22 @@ class WatchActivity : AppCompatActivity() {
         viewModel.getWatchMovie(userEmail).observe(this, Observer {
             it?.let {
                 with(recyclerWatch) {
-                    watchAdapter = WatchAdapter(it, {}, { watch ->
+                    watchAdapter = WatchAdapter(it, listFavorite, {
+                            movieResult ->
+                        viewModel.insertMovie(
+                            FavoriteMovie(
+                                movieResult.id, userEmail, movieResult.poster_path,
+                                movieResult.overview, movieResult.release_date,
+                                movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
+                            )
+                        )
+                    }, { favoriteResult ->
+                        viewModel.deleteMovie(
+                            FavoriteMovie(favoriteResult.id, userEmail, favoriteResult.poster_path,
+                                favoriteResult.overview, favoriteResult.release_date,
+                                favoriteResult.genre_ids, favoriteResult.original_title, favoriteResult.vote_average)
+                        )
+                    }, {}, { watch ->
                         viewModel.deleteWatchMovie(watch)
                         showSnackBar(recyclerWatch, watch)
                     })

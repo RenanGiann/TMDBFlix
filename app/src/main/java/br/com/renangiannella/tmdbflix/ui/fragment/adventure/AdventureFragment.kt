@@ -120,8 +120,8 @@ class AdventureFragment: Fragment() {
                 )
             )
         })
-        with(recyclerViewAction) {
-            layoutManager = GridLayoutManager(activity, 2)
+        with(recyclerViewAdventure) {
+            layoutManager = GridLayoutManager(activity, 3)
             setHasFixedSize(true)
             adapter = mAdapter
         }
