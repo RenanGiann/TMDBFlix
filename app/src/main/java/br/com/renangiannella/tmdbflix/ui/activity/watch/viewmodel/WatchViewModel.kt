@@ -1,4 +1,4 @@
-package br.com.renangiannella.tmdbflix.ui.activity.favorite.viewmodel
+package br.com.renangiannella.tmdbflix.ui.activity.watch.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -9,16 +9,13 @@ import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
-class FavoriteViewModel(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
-
-    fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
+class WatchViewModel (val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModel() {
 
     fun getWatchMovie(userEmail: String): LiveData<List<WatchMovie>> = repository.getWatchMovie(userEmail)
 
-    fun deleteWatchMovie(watchMovie: WatchMovie) = viewModelScope.launch {
-        repository.deleteWatchMovie(watchMovie)
-    }
+    fun getFavoriteMovie(userEmail: String): LiveData<List<FavoriteMovie>> = repository.getFavoriteMovie(userEmail)
 
     fun insertWatchMovie(watchMovie: WatchMovie) = viewModelScope.launch {
         repository.insertWatchMovie(watchMovie)
@@ -28,17 +25,20 @@ class FavoriteViewModel(val repository: MovieRepository, private val ioDispatche
         repository.insertFavoriteMovie(favoriteMovie)
     }
 
+    fun deleteWatchMovie(watchMovie: WatchMovie) = viewModelScope.launch {
+        repository.deleteWatchMovie(watchMovie)
+    }
+
     fun deleteMovie(favoriteMovie: FavoriteMovie) = viewModelScope.launch {
         repository.deleteFavoriteMovie(favoriteMovie)
     }
 
-    class FavoriteViewModelFactory(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModelProvider.Factory {
+    class WatchViewModelFactory(val repository: MovieRepository, private val ioDispatcher: CoroutineDispatcher): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
-                return FavoriteViewModel(repository, ioDispatcher) as T
+            if (modelClass.isAssignableFrom(WatchViewModel::class.java)) {
+                return WatchViewModel(repository, ioDispatcher) as T
             }
             throw IllegalArgumentException("unknown viewmodel class")
         }
-
     }
 }

@@ -15,6 +15,7 @@ import br.com.renangiannella.tmdbflix.ui.activity.home.viewmodel.PopViewModel
 import br.com.renangiannella.tmdbflix.ui.activity.login.LoginActivity
 import br.com.renangiannella.tmdbflix.ui.activity.profile.ProfileActivity
 import br.com.renangiannella.tmdbflix.ui.activity.search.SearchActivity
+import br.com.renangiannella.tmdbflix.ui.activity.watch.WatchActivity
 import br.com.renangiannella.tmdbflix.ui.pageadapter.HomePageAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home.*
@@ -31,6 +32,10 @@ class HomeActivity : AppCompatActivity(), ClickListener {
         when(item.itemId) {
             R.id.menuFavorite -> {
                 startActivity(Intent(this@HomeActivity, FavoriteActivity::class.java))
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.menuWatch -> {
+                startActivity(Intent(this@HomeActivity, WatchActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.menuSearch -> {

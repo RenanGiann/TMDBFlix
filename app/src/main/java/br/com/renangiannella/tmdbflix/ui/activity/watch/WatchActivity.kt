@@ -1,8 +1,8 @@
-package br.com.renangiannella.tmdbflix.ui.activity.favorite
+package br.com.renangiannella.tmdbflix.ui.activity.watch
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -11,79 +11,72 @@ import br.com.renangiannella.tmdbflix.R
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
-import br.com.renangiannella.tmdbflix.data.utils.SharedPreference
-import br.com.renangiannella.tmdbflix.ui.activity.favorite.viewmodel.FavoriteViewModel
 import br.com.renangiannella.tmdbflix.ui.activity.home.HomeActivity
-import br.com.renangiannella.tmdbflix.ui.activity.login.LoginActivity
+import br.com.renangiannella.tmdbflix.ui.activity.watch.viewmodel.WatchViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_favorite.*
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_watch.*
 import kotlinx.android.synthetic.main.include_toobar.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers.IO
+import okhttp3.Dispatcher
 
-class FavoriteActivity : AppCompatActivity() {
+class WatchActivity : AppCompatActivity() {
 
     lateinit var userEmail: String
-    lateinit var viewModel: FavoriteViewModel
-    lateinit var favoriteAdapter: FavoriteAdapter
-    var listWatch = listOf<WatchMovie>()
+    lateinit var viewModel: WatchViewModel
+    lateinit var watchAdapter: WatchAdapter
+    var listFavorite = listOf<FavoriteMovie>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_favorite)
+        setContentView(R.layout.activity_watch)
 
-        toolbarMovies.title = "Favoritos"
+        toolbarMovies.title = "Assistir"
         setSupportActionBar(toolbarMovies)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val repository = MovieRepository(this)
-        viewModel = FavoriteViewModel.FavoriteViewModelFactory(repository, Dispatchers.IO).create(
-            FavoriteViewModel::class.java)
+        viewModel = WatchViewModel.WatchViewModelFactory(repository, Dispatchers.IO).create(WatchViewModel::class.java)
 
         HomeActivity.getData(this)?.let { loggedUser ->
             userEmail = loggedUser
         }
 
+        deleteWatchMovieSwipe(recyclerWatch)
+
         viewModel.getWatchMovie(userEmail).observe(this, Observer {
             it?.let {
-                listWatch = it
-            }
-        })
-
-        deleteMovieSwipe(recyclerViewFavorite)
-
-        viewModel.getFavoriteMovie(userEmail).observe(this, Observer {
-            it?.let {
-                with(recyclerViewFavorite){
-                    favoriteAdapter = FavoriteAdapter(it, listWatch, {movieResult ->
-                        viewModel.insertWatchMovie(
-                            WatchMovie(
+                with(recyclerWatch) {
+                    watchAdapter = WatchAdapter(it, listFavorite, {
+                            movieResult ->
+                        viewModel.insertMovie(
+                            FavoriteMovie(
                                 movieResult.id, userEmail, movieResult.poster_path,
                                 movieResult.overview, movieResult.release_date,
                                 movieResult.genre_ids, movieResult.original_title, movieResult.vote_average
                             )
-                        )}, { watchResult ->
-                        viewModel.deleteWatchMovie(
-                            WatchMovie(watchResult.id, userEmail, watchResult.poster_path,
-                                watchResult.overview, watchResult.release_date,
-                                watchResult.genre_ids, watchResult.original_title, watchResult.vote_average)
                         )
-                    }, {}, {favorite ->
-                        viewModel.deleteMovie(favorite)
-                        showSnackBar(recyclerViewFavorite, favorite)
+                    }, { favoriteResult ->
+                        viewModel.deleteMovie(
+                            FavoriteMovie(favoriteResult.id, userEmail, favoriteResult.poster_path,
+                                favoriteResult.overview, favoriteResult.release_date,
+                                favoriteResult.genre_ids, favoriteResult.original_title, favoriteResult.vote_average)
+                        )
+                    }, {}, { watch ->
+                        viewModel.deleteWatchMovie(watch)
+                        showSnackBar(recyclerWatch, watch)
                     })
-                    layoutManager = GridLayoutManager(this@FavoriteActivity, 3)
+                    layoutManager = GridLayoutManager(this@WatchActivity, 3)
                     setHasFixedSize(true)
-                    adapter = favoriteAdapter
+                    adapter = watchAdapter
                 }
             }
         })
     }
 
-    private fun deleteMovieSwipe(view: View) {
+    private fun deleteWatchMovieSwipe(view: View) {
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -97,9 +90,9 @@ class FavoriteActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val favorite = favoriteAdapter.getCurrentMovie(viewHolder.adapterPosition)
-                viewModel.deleteMovie(favorite)
-                showSnackBar(view, favorite)
+                val watch = watchAdapter.getCurrentMovie(viewHolder.adapterPosition)
+                viewModel.deleteWatchMovie(watch)
+                showSnackBar(view, watch)
             }
 
         }
@@ -109,14 +102,12 @@ class FavoriteActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSnackBar(view: View, favoriteMovie: FavoriteMovie) {
+    private fun showSnackBar(view: View, watchMovie: WatchMovie) {
         Snackbar.make(view, getString(R.string.dislikeTitleSnack), Snackbar.LENGTH_LONG).apply {
             setAction(getString(R.string.cancelSnack)){
-                viewModel.insertMovie(favoriteMovie)
+                viewModel.insertWatchMovie(watchMovie)
             }
             show()
         }
     }
-
-
 }

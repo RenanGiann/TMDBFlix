@@ -27,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
             android:background="@drawable/background_text_vote"
             android:paddingTop="10dp"
             android:gravity="center_horizontal"
@@ -43,13 +42,11 @@
             android:id="@+id/textNameMovie"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="50dp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewMovie"
             app:layout_constraintStart_toStartOf="@+id/imageViewMovie"
             app:layout_constraintTop_toBottomOf="@+id/textVoteAverage"
             tools:text="Ad Astra" />
@@ -66,8 +63,8 @@
 
         <ImageView
             android:id="@+id/img_favorite_movie"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/ic_favorite_gray"
             android:elevation="4dp"
             android:alpha="0.5"
@@ -77,14 +74,36 @@
 
         <ImageView
             android:id="@+id/img_favorite_red"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:elevation="4dp"
             android:background="@drawable/ic_favorite_red"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textVoteAverage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textVoteAverage" />
+
+        <ImageView
+            android:id="@+id/img_diswatch"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="7dp"
+            android:alpha="0.5"
+            android:background="@drawable/ic_assistido"
+            android:elevation="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/textVoteAverage"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_towatch"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="7dp"
+            android:visibility="gone"
+            android:background="@drawable/ic_assistir"
+            android:elevation="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/textVoteAverage"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

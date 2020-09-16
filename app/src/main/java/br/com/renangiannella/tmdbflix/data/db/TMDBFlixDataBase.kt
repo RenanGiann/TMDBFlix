@@ -10,15 +10,18 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.renangiannella.tmdbflix.data.db.converter.Converters
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
 import br.com.renangiannella.tmdbflix.data.db.modeldb.User
+import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.FavoriteDAO
 import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.UserDAO
+import br.com.renangiannella.tmdbflix.data.db.modeldb.dao.WatchDAO
 
-@Database(entities = [User::class, FavoriteMovie::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, FavoriteMovie::class, WatchMovie::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class TMDBFlixDataBase: RoomDatabase() {
 
     abstract fun userDAO(): UserDAO
     abstract fun favoriteDAO(): FavoriteDAO
+    abstract fun watchDAO(): WatchDAO
 
     companion object {
         @Volatile

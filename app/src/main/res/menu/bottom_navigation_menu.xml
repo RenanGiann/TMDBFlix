@@ -15,6 +15,12 @@
         />
 
     <item
+        android:id="@+id/menuWatch"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_watch"
+        />
+
+    <item
         android:id="@+id/menuSearch"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_search"

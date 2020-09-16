@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import br.com.renangiannella.tmdbflix.core.State
 import br.com.renangiannella.tmdbflix.data.db.modeldb.FavoriteMovie
+import br.com.renangiannella.tmdbflix.data.db.modeldb.WatchMovie
 import br.com.renangiannella.tmdbflix.data.model.response.MovieResponse
 import br.com.renangiannella.tmdbflix.data.repository.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -66,6 +67,16 @@ class GenreViewModel(val repository: MovieRepository, private val ioDispatcher: 
     fun insertMovie(favoriteMovie: FavoriteMovie) =
         viewModelScope.launch {
             repository.insertFavoriteMovie(favoriteMovie)
+        }
+
+    fun getWatchMovie(userEmail: String): LiveData<List<WatchMovie>> = repository.getWatchMovie(userEmail)
+
+    fun deleteWatchMovie(watchMovie: WatchMovie) = viewModelScope.launch {
+        repository.deleteWatchMovie(watchMovie)
+    }
+
+    fun insertWatchMovie(watchMovie: WatchMovie) = viewModelScope.launch {
+            repository.insertWatchMovie(watchMovie)
         }
 
 
