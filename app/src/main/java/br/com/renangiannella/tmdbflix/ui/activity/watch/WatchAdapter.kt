@@ -64,6 +64,9 @@ class WatchAdapter(val watch: List<WatchMovie>,
                 picasso.load("""${BuildConfig.BASE_URL_IMAGE}${movie.poster_path}""").into(posterMovie)
             }
 
+            imageLike.visibility = View.GONE
+            imageDislike.visibility = View.GONE
+
             imageWatch.visibility = View.VISIBLE
             imageDiswatch.visibility = View.GONE
 

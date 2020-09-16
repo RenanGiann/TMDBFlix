@@ -66,6 +66,8 @@ class FavoriteAdapter(val favorites: List<FavoriteMovie>,
                 picasso.load("""${BuildConfig.BASE_URL_IMAGE}${movie.poster_path}""").into(posterMovie)
             }
 
+            imageDiswatch.visibility = View.GONE
+            imageWatch.visibility = View.GONE
             imageLike.visibility = View.VISIBLE
             imageDislike.visibility = View.GONE
 
